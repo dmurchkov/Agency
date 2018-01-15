@@ -1,18 +1,17 @@
 package com.dmurchkov.service.agency;
 
+import com.dmurchkov.service.agency.exception.NoSuchAdException;
 import com.dmurchkov.service.agency.model.Ad;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
 import java.util.Map;
 
-@Service
-@Slf4j
+import static java.lang.String.valueOf;
+
+@AllArgsConstructor
 public class AgencyService {
 
-    @Autowired
-    private Storage storage;
+    private final Storage storage;
 
     public long submit(String name, String email, String phone, Double area, Integer numOfRooms, Long cost,
                        Integer floor, String city, String street, String houseNum, String description) {
@@ -24,6 +23,10 @@ public class AgencyService {
     }
 
     public Ad getById(long id) {
-        return storage.getById(id);
+        Ad adById = storage.getById(id);
+        if (adById == null) {
+            throw new NoSuchAdException("id:" + valueOf(id));
+        }
+        return adById;
     }
 }

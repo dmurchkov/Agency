@@ -35,23 +35,16 @@ public class AgencyControllerTest {
     @Test
     public void shouldReturnAllAds() throws Exception {
         when(agencyService.getAll()).thenReturn(Collections.emptyMap());
-        this.mockMvc.perform(get("/agency/ads/all"))
+        this.mockMvc.perform(get("/agency/ads/"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void shoudReturnAdById() throws Exception {
+    public void shouldReturnAdById() throws Exception {
         when(agencyService.getById(10)).thenReturn(new Ad());
         this.mockMvc.perform(get("/agency/ads/10"))
                 .andExpect(status().isOk());
 
-    }
-
-    @Test
-    public void shouldThrowNoSuchAdException() throws Exception {
-        when(agencyService.getById(10)).thenReturn(null);
-        this.mockMvc.perform(get("/agency/ads/10"))
-                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -75,6 +68,6 @@ public class AgencyControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
-        Assertions.assertThat(expectedId).isNotEqualTo(1000L);
+        Assertions.assertThat(Long.parseLong(expectedId)).isEqualTo(1000L);
     }
 }

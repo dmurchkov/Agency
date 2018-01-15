@@ -3,19 +3,17 @@ package com.dmurchkov.service.agency.rest;
 import com.dmurchkov.service.agency.AgencyService;
 import com.dmurchkov.service.agency.exception.NoSuchAdException;
 import com.dmurchkov.service.agency.model.Ad;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-import static java.lang.String.*;
-
 @RestController
 @RequestMapping(value = "/agency/ads")
+@AllArgsConstructor
 public class AgencyController {
 
-    @Autowired
-    AgencyService agencyService;
+    private final AgencyService agencyService;
 
     @PostMapping(value = "/submit")
     public long submit(@RequestParam(value = "name") String name,
@@ -33,17 +31,13 @@ public class AgencyController {
         return agencyService.submit(name, email, phone, area, numOfRooms, cost, floor, city, street, houseNum, description);
     }
 
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public Map<Long, Ad> getAll() {
         return agencyService.getAll();
     }
 
     @GetMapping(value = "/{id}")
     public Ad getById(@PathVariable("id") long id) throws NoSuchAdException {
-        Ad adById = agencyService.getById(id);
-        if (adById == null) {
-            throw new NoSuchAdException("id:" + valueOf(id));
-        }
-        return adById;
+        return agencyService.getById(id);
     }
 }
