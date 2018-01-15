@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Apartment {
+    private long id;
     private double area;
     private int numberOfRooms;
     private long cost;

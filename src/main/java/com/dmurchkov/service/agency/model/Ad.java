@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Ad {
     private long id;
-    private Author author;
-    private Apartment apartment;
+    private long authorId;
+    private long apartmentId;
     private String description;
 }
