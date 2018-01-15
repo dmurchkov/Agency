@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @NoArgsConstructor
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "No such Ad")
-public class NoSuchAdException extends RuntimeException {
+public class NoSuchEntityException extends RuntimeException {
 
-    public NoSuchAdException(String message) {
-        super(message);
+    public NoSuchEntityException(String message) {
+        super("id:" + message);
     }
 }

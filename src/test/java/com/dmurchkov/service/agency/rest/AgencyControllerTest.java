@@ -2,14 +2,14 @@ package com.dmurchkov.service.agency.rest;
 
 import com.dmurchkov.service.agency.AgencyService;
 import com.dmurchkov.service.agency.model.Ad;
-import org.assertj.core.api.Assertions;
+import com.dmurchkov.service.agency.model.Apartment;
+import com.dmurchkov.service.agency.model.Author;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,42 +32,83 @@ public class AgencyControllerTest {
     @MockBean
     private AgencyService agencyService;
 
+    private final long mocked_id = 100L;
+
     @Test
-    public void shouldReturnAllAds() throws Exception {
-        when(agencyService.getAll()).thenReturn(Collections.emptyMap());
-        this.mockMvc.perform(get("/agency/ads/"))
+    public void shouldSubmitNewAdd() throws Exception {
+        when(agencyService.submitAdd(anyLong(), anyLong(), anyObject())).thenReturn(mocked_id);
+        this.mockMvc.perform(post("/agency/ad")
+                .param("authorId", "100")
+                .param("apartmentId", "100")
+                .param("description", "description"))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void shouldReturnAdById() throws Exception {
-        when(agencyService.getById(10)).thenReturn(new Ad());
-        this.mockMvc.perform(get("/agency/ads/10"))
+        when(agencyService.getAdById(anyLong())).thenReturn(new Ad());
+        this.mockMvc.perform(get("/agency/ad/10"))
                 .andExpect(status().isOk());
-
     }
 
     @Test
-    public void shouldCreateNewAd() throws Exception {
-        when(agencyService
-                .submit(anyString(), anyString(), anyString(), anyDouble(), anyInt(), anyLong(), anyInt(), anyString(),
-                        anyString(), anyString(), anyObject())).thenReturn(1000L);
+    public void shouldReturnAdds() throws Exception {
+        when(agencyService.getAdds()).thenReturn(Collections.emptyMap());
+        this.mockMvc.perform(get("/agency/ads"))
+                .andExpect(status().isOk());
+    }
 
-        String expectedId = this.mockMvc.perform(post("/agency/ads/submit")
-                .contentType(MediaType.APPLICATION_JSON)
+    @Test
+    public void shouldCreateAuthor() throws Exception {
+        when(agencyService.createAuthor(anyString(), anyString(), anyString())).thenReturn(mocked_id);
+        this.mockMvc.perform(post("/agency/author")
                 .param("name", "name")
                 .param("email", "email")
-                .param("phone", "phone")
+                .param("phone", "phone"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnAuthorById() throws Exception {
+        when(agencyService.getAuthorById(anyLong())).thenReturn(new Author());
+        this.mockMvc.perform(get("/agency/author/10"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnAuthors() throws Exception {
+        when(agencyService.getAuthors()).thenReturn(Collections.emptyMap());
+        this.mockMvc.perform(get("/agency/authors"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldCreateApartment() throws Exception {
+        when(agencyService
+                .createApartment(anyDouble(), anyInt(), anyLong(), anyInt(), anyString(), anyString(), anyString()))
+                .thenReturn(mocked_id);
+        this.mockMvc.perform(post("/agency/apartment")
                 .param("area", "100.0")
-                .param("numOfRooms", "4")
+                .param("numOfRooms", "3")
                 .param("cost", "10000")
                 .param("floor", "10")
                 .param("city", "city")
                 .param("street", "street")
                 .param("houseNum", "houseNum"))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(status().isOk());
+    }
 
-        Assertions.assertThat(Long.parseLong(expectedId)).isEqualTo(1000L);
+    @Test
+    public void shouldReturnApartmentById() throws Exception {
+        when(agencyService.getApartmentById(anyLong())).thenReturn(new Apartment());
+        this.mockMvc.perform(get("/agency/apartment/10"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnApartments() throws Exception {
+        when(agencyService.getApartments()).thenReturn(Collections.emptyMap());
+        this.mockMvc.perform(get("/agency/apartments"))
+                .andExpect(status().isOk());
     }
 }

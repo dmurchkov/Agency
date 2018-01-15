@@ -1,7 +1,7 @@
 package com.dmurchkov.service.agency.configuration;
 
 import com.dmurchkov.service.agency.AgencyService;
-import com.dmurchkov.service.agency.Storage;
+import com.dmurchkov.service.agency.persistence.Storage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
