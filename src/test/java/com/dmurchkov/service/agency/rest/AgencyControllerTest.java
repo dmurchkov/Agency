@@ -4,6 +4,7 @@ import com.dmurchkov.service.agency.AgencyService;
 import com.dmurchkov.service.agency.model.Ad;
 import com.dmurchkov.service.agency.model.Apartment;
 import com.dmurchkov.service.agency.model.Author;
+import com.dmurchkov.service.agency.persistence.Storage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class AgencyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private Storage storage;
 
     @MockBean
     private AgencyService agencyService;
@@ -110,5 +114,26 @@ public class AgencyControllerTest {
         when(agencyService.getApartments()).thenReturn(Collections.emptyMap());
         this.mockMvc.perform(get("/agency/apartments"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldThrowNoSuchEntityExceptionIfAuthorIsNull() throws Exception {
+        when(storage.getAuthorById(anyLong())).thenReturn(null);
+        this.mockMvc.perform(get("agency/author/10"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldThrowNoSuchEntityExceptionIfApartmentIsNull() throws Exception {
+        when(storage.getApartmentById(anyLong())).thenReturn(null);
+        this.mockMvc.perform(get("agency/apartment/10"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldThrowNoSuchEntityExceptionIfAddIsNull() throws Exception {
+        when(storage.getAdById(anyLong())).thenReturn(null);
+        this.mockMvc.perform(get("agency/ad/10"))
+                .andExpect(status().isNotFound());
     }
 }

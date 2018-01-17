@@ -14,7 +14,7 @@ public class AgencyConfiguration {
     }
 
     @Bean
-    public AgencyService agencyService() {
-        return new AgencyService(storage());
+    public AgencyService agencyService(Storage storage) {
+        return new AgencyService(storage);
     }
 }
