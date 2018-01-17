@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.Optional;
 
 import static java.lang.String.valueOf;
 
@@ -19,13 +18,10 @@ public class AgencyService {
 
     private final Storage storage;
 
+    @SuppressWarnings("all")
     public long submitAdd(long authorId, long apartmentId, String description) throws NoSuchEntityException {
-        if (!storage.getAuthorById(authorId).isPresent()) {
-            throw new NoSuchEntityException(valueOf(authorId));
-        }
-        if (!storage.getApartmentById(apartmentId).isPresent()) {
-            throw new NoSuchEntityException(valueOf(apartmentId));
-        }
+        storage.getAuthorById(authorId).orElseThrow(() -> new NoSuchEntityException(valueOf(authorId)));
+        storage.getApartmentById(apartmentId).orElseThrow(() -> new NoSuchEntityException(valueOf(apartmentId)));
 
         return storage.submitAdd(authorId, apartmentId, description);
     }
@@ -34,10 +30,9 @@ public class AgencyService {
         return storage.allAds();
     }
 
+    @SuppressWarnings("all")
     public Ad getAdById(long id) throws NoSuchEntityException {
-        if (!storage.getAdById(id).isPresent()) {
-            throw new NoSuchEntityException(valueOf(id));
-        }
+        storage.getAdById(id).orElseThrow(() -> new NoSuchEntityException(valueOf(id)));
 
         return storage.getAdById(id).get();
     }
@@ -46,10 +41,9 @@ public class AgencyService {
         return storage.createAuthor(name, email, phone);
     }
 
+    @SuppressWarnings("all")
     public Author getAuthorById(long id) throws NoSuchEntityException {
-        if (!storage.getAuthorById(id).isPresent()) {
-            throw new NoSuchEntityException(valueOf(id));
-        }
+        storage.getAuthorById(id).orElseThrow(() -> new NoSuchEntityException(valueOf(id)));
 
         return storage.getAuthorById(id).get();
     }
@@ -64,10 +58,9 @@ public class AgencyService {
         return storage.createApartment(area, numOfRooms, cost, floor, city, street, houseNum);
     }
 
+    @SuppressWarnings("all")
     public Apartment getApartmentById(long id) throws NoSuchEntityException {
-        if (!storage.getApartmentById(id).isPresent()) {
-            throw new NoSuchEntityException(valueOf(id));
-        }
+        storage.getApartmentById(id).orElseThrow(() -> new NoSuchEntityException(valueOf(id)));
 
         return storage.getApartmentById(id).get();
     }
