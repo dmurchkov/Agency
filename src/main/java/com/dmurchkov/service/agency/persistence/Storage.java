@@ -7,6 +7,7 @@ import com.dmurchkov.service.agency.model.Author;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class Storage {
@@ -34,8 +35,8 @@ public class Storage {
         return authors;
     }
 
-    public Author getAuthorById(long id) {
-        return authors.get(id);
+    public Optional<Author> getAuthorById(long id) {
+        return Optional.ofNullable(authors.get(id));
     }
 
     public long createApartment(double area, int numOfRooms, long cost, int floor,
@@ -51,8 +52,8 @@ public class Storage {
         return apartments;
     }
 
-    public Apartment getApartmentById(long id) {
-        return apartments.get(id);
+    public Optional<Apartment> getApartmentById(long id) {
+        return Optional.ofNullable(apartments.get(id));
     }
 
     public long submitAdd(long authorId, long apartmentId, String description) {
@@ -66,7 +67,7 @@ public class Storage {
         return ads;
     }
 
-    public Ad getAdById(long id) {
-        return ads.get(id);
+    public Optional<Ad> getAdById(long id) {
+        return Optional.ofNullable(ads.get(id));
     }
 }

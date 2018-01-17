@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static java.lang.String.valueOf;
 
@@ -19,10 +20,10 @@ public class AgencyService {
     private final Storage storage;
 
     public long submitAdd(long authorId, long apartmentId, String description) throws NoSuchEntityException {
-        if (storage.getAuthorById(authorId) == null) {
+        if (!storage.getAuthorById(authorId).isPresent()) {
             throw new NoSuchEntityException(valueOf(authorId));
         }
-        if (storage.getApartmentById(apartmentId) == null) {
+        if (!storage.getApartmentById(apartmentId).isPresent()) {
             throw new NoSuchEntityException(valueOf(apartmentId));
         }
 
@@ -34,12 +35,11 @@ public class AgencyService {
     }
 
     public Ad getAdById(long id) throws NoSuchEntityException {
-        Ad ad = storage.getAdById(id);
-        if (ad == null) {
+        if (!storage.getAdById(id).isPresent()) {
             throw new NoSuchEntityException(valueOf(id));
         }
 
-        return ad;
+        return storage.getAdById(id).get();
     }
 
     public long createAuthor(String name, String email, String phone) {
@@ -47,12 +47,11 @@ public class AgencyService {
     }
 
     public Author getAuthorById(long id) throws NoSuchEntityException {
-        Author author = storage.getAuthorById(id);
-        if (author == null) {
+        if (!storage.getAuthorById(id).isPresent()) {
             throw new NoSuchEntityException(valueOf(id));
         }
 
-        return author;
+        return storage.getAuthorById(id).get();
     }
 
     public Map<Long, Author> getAuthors() {
@@ -66,12 +65,11 @@ public class AgencyService {
     }
 
     public Apartment getApartmentById(long id) throws NoSuchEntityException {
-        Apartment apartment = storage.getApartmentById(id);
-        if (apartment == null) {
+        if (!storage.getApartmentById(id).isPresent()) {
             throw new NoSuchEntityException(valueOf(id));
         }
 
-        return apartment;
+        return storage.getApartmentById(id).get();
     }
 
     public Map<Long, Apartment> getApartments() {
