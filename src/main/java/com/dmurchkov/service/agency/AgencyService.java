@@ -13,7 +13,6 @@ import java.util.Map;
 import static java.lang.String.valueOf;
 
 @AllArgsConstructor
-@Slf4j
 public class AgencyService {
 
     private final Storage storage;
