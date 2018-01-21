@@ -6,7 +6,6 @@ import com.dmurchkov.service.agency.model.Apartment;
 import com.dmurchkov.service.agency.model.Author;
 import com.dmurchkov.service.agency.persistence.Storage;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
@@ -19,8 +18,10 @@ public class AgencyService {
 
     @SuppressWarnings("all")
     public long submitAdd(long authorId, long apartmentId, String description) throws NoSuchEntityException {
-        storage.getAuthorById(authorId).orElseThrow(() -> new NoSuchEntityException(valueOf(authorId)));
-        storage.getApartmentById(apartmentId).orElseThrow(() -> new NoSuchEntityException(valueOf(apartmentId)));
+        storage.getAuthorById(authorId).orElseThrow(() ->
+                new NoSuchEntityException("Author id: " + valueOf(authorId)));
+        storage.getApartmentById(apartmentId).orElseThrow(() ->
+                new NoSuchEntityException("Apartment id: " + valueOf(apartmentId)));
 
         return storage.submitAdd(authorId, apartmentId, description);
     }
