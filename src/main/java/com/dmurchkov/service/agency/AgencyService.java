@@ -1,6 +1,7 @@
 package com.dmurchkov.service.agency;
 
 import com.dmurchkov.service.agency.exception.NoSuchEntityException;
+import com.dmurchkov.service.agency.kafka.AgencyKafkaProducer;
 import com.dmurchkov.service.agency.model.Ad;
 import com.dmurchkov.service.agency.model.Apartment;
 import com.dmurchkov.service.agency.model.Author;
@@ -9,12 +10,14 @@ import lombok.AllArgsConstructor;
 
 import java.util.Map;
 
+import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
 @AllArgsConstructor
 public class AgencyService {
 
     private final Storage storage;
+    private final AgencyKafkaProducer agencyKafkaProducer;
 
     @SuppressWarnings("all")
     public long submitAdd(long authorId, long apartmentId, String description) throws NoSuchEntityException {
@@ -38,7 +41,11 @@ public class AgencyService {
     }
 
     public long createAuthor(String name, String email, String phone) {
-        return storage.createAuthor(name, email, phone);
+        long authorId = storage.createAuthor(name, email, phone);
+        String kafkaMessage = format("Author has been created successfully, id:%s", authorId);
+        agencyKafkaProducer.send(kafkaMessage);
+
+        return authorId;
     }
 
     @SuppressWarnings("all")
